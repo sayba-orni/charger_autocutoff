@@ -1,33 +1,58 @@
-# charger_autocutoff
-This project is about designing and creating a battery charger from scratch with an auto cut-off
-feature. The goal is to make a charger that works efficiently with modern battery-powered
-devices while being safe and easy to use. The auto cut-off feature will stop charging when the
-battery is full, preventing overcharging and extending the battery’s life.
-In this repository I have uploaded all the files I created to design the pcb of the charger, which includes custom footprints of the components I used in this project as well as the schematic and pcb layout files. I used Altium designer for this project.
+# Battery Charger with Automatic Cutoff and Custom Buck Converter
 
+This project covers two circuits I designed in **Altium Designer**: a DC–DC buck converter and a battery charger with an adjustable automatic cutoff. The repository includes the original schematic and PCB design files, component libraries, circuit diagrams, and photographs of the assembled boards.
 
-# Battery Charger with Automatic Cutoff
+## Project overview
 
-This project involves the design and implementation of a battery charging system with an automatic cutoff mechanism and a custom DC-DC buck converter. The circuit is designed to regulate the charging voltage and automatically disconnect the battery when a preset voltage threshold is reached, helping prevent overcharging.
+The charger design starts with a step-down transformer, a four-diode bridge rectifier, and a smoothing capacitor. A separate buck-converter stage is used to regulate the charging supply. The cutoff circuit uses a MOSFET, relay, and potentiometer to control when the charging connection is disconnected. Indicator LEDs are included on the charger board.
 
-The system uses a step-down transformer to convert 220V AC to 12V AC, followed by a full-wave bridge rectifier and a smoothing capacitor to obtain DC voltage. A buck converter then reduces the rectified voltage to approximately 12.6V for battery charging.
+In testing, the cutoff was observed at **11.65 V**, compared with the set target of **11.67 V** (a difference of **0.02 V**). This is a measured switching result, not a claim of comprehensive battery safety or charging-performance validation.
 
-The automatic cutoff mechanism uses a MOSFET, relay, and adjustable potentiometer. As the battery voltage increases, the voltage at the MOSFET gate rises. Once the preset threshold is reached, the MOSFET activates the relay, disconnecting the charging path.
+## 1. Custom DC–DC buck converter
 
-Two LEDs indicate the charging status:
-- **Green LED:** Battery is charging.
-- **Red LED:** Charging has been disconnected.
+The buck converter schematic uses an **SG3524** controller, an **IRF250 MOSFET**, a diode, an inductor, an output capacitor, and a feedback/control network. The original Altium files are included as `CHARGER.SchDoc` and `CHARGER.PcbDoc` (verify the matching design in Altium if using these files for fabrication).
 
-During experimental testing, the cutoff voltage was measured at **11.65V**, compared with the configured target of **11.67V**, demonstrating close agreement between the expected and measured switching thresholds.
+### Circuit schematic
 
-## PCB Designs
+![SG3524-based buck converter schematic](images/buck-converter-schematic.png)
 
-The circuit schematics and PCB layouts were developed using **Altium Designer**.
+### Assembled buck converter PCB
 
-### Battery Charger with Automatic Cutoff
+![Assembled buck converter PCB](images/buck-converter-assembled-pcb.png)
 
-![Battery Charger PCB](charger%20pcb.jpg)
+## 2. Battery charger with automatic cutoff
 
-### Custom DC-DC Buck Converter
+The charger schematic includes a four-diode bridge rectifier, filtering capacitor, adjustable potentiometer, MOSFET, relay, and charging-status LEDs. The relay is intended to disconnect the charging path at the selected cutoff threshold. The original Altium files are included as `PE.SchDoc` and `PE.PcbDoc` (verify the matching design in Altium if using these files for fabrication).
 
-![Custom Buck Converter PCB](custom%20buck%20converter%20pcb.jpg)
+### Circuit schematic
+
+![Battery charger automatic cutoff schematic](images/charger-cutoff-schematic.png)
+
+### Assembled charger PCB
+
+![Assembled charger PCB](images/charger-assembled-pcb.png)
+
+## PCB layout images
+
+The repository also retains the original PCB images:
+
+### Charger PCB layout
+
+![Charger PCB layout](charger%20pcb.jpg)
+
+### Buck converter PCB layout
+
+![Buck converter PCB layout](custom%20buck%20converter%20pcb.jpg)
+
+## Repository contents
+
+- `CHARGER.SchDoc`, `CHARGER.PcbDoc` — Altium schematic and PCB document for one circuit board
+- `PE.SchDoc`, `PE.PcbDoc` — Altium schematic and PCB document for the other circuit board
+- `Power_electronics.PrjPcb`, `Power_electronics_FULL.PrjPcb` — Altium project files
+- `*.SchLib`, `*.PcbLib`, `*.intlib` — component and footprint libraries
+- `images/` — newly added schematic screenshots and assembled-board photographs
+- `charger pcb.jpg`, `custom buck converter pcb.jpg` — existing PCB layout images
+
+## Notes
+
+These are project documentation and prototype designs, not certified charging equipment. The exact battery chemistry, charging profile, isolation, protective devices, and safe operating limits must be verified before practical battery charging. **Do not connect an unverified prototype directly to mains electricity.**
